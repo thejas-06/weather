@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #weather {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Weather App</h2>
+        <input type="text" id="location" placeholder="Enter location">
+        <button onclick="getWeather()">Get Weather</button>
+        <div id="weather"></div>
+    </div>
+
+    <script>
+        function getWeather() {
+            let location = document.getElementById('location').value;
+            let apiKey = 'be703b5caafe47d8866102708251502';
+            let url = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}&aqi=yes`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('weather').innerHTML = `
+                        <h3>${data.location.name}, ${data.location.country}</h3>
+                        <p>Temperature: ${data.current.temp_c}°C</p>
+                        <p>Condition: ${data.current.condition.text}</p>
+                        <img src="${data.current.condition.icon}" alt="Weather icon">
+                        <p>Humidity: ${data.current.humidity}%</p>
+                        <p>Wind Speed: ${data.current.wind_kph} kph</p>
+                    `;
+                })
+                .catch(error => {
+                    document.getElementById('weather').innerHTML = `<p>Location not found.</p>`;
+                });
+        }
+    </script>
+</body>
+</html>
